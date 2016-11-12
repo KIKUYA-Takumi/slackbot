@@ -1,12 +1,24 @@
 # -*- coding: utf-8 -*-
-from slackbot.bot import respond_to, listen_to
+from slackbot.bot import listen_to
 
 
-@listen_to('私は(.*)です')
-@listen_to('わたしは(.*)です')
-def hello(message, something):
-    message.reply('こんにちは!{0}さん。'.format(something))
+class Reply:
+    def __init__(self):
+        self.counter = 0
 
-@respond_to('(.*)')
+    def increase(self):
+        self.counter += 1
+        return self.counter
+
+
+r = Reply()
+
+
+@listen_to('(.*)')
 def refrection(message, something):
-    message.reply(something)
+    count = r.increase()
+    if count % 3 == 0:
+        count = str(count)
+        message.reply(count)
+    else:
+        message.reply('それで？')
